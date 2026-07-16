@@ -1,18 +1,33 @@
 node_modules/
 src/
 tests/
+test-package.js
 .bolt/
 .github/
 .vscode/
+.idea/
 *.log
 *.tgz
+*.swp
+*.swo
 coverage/
 .git/
 .gitignore
 .eslintrc.js
 .eslintrc.json
+eslint.config.js
 *.config.js
 *.config.ts
 tsconfig.json
+tsconfig.tsbuildinfo
 package-lock.json
 yarn.lock
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+.env.*.local
