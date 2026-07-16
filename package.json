@@ -1,0 +1,74 @@
+{
+  "name": "khmer-hybrid-calendar",
+  "version": "1.0.0",
+  "description": "A comprehensive Khmer hybrid calendar library with Gregorian and Khmer lunar dates, moon phases, and holiday calculations",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "prepublishOnly": "npm run build",
+    "version": "git add -A src",
+    "postversion": "git push && git push --tags",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "khmer",
+    "calendar",
+    "lunar",
+    "gregorian",
+    "cambodian",
+    "holidays",
+    "buddhist",
+    "moon-phases",
+    "hybrid-calendar"
+  ],
+  "author": "Heng Loem <heng.loem@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hengloem/khmer-hybrid-calendar-package"
+  },
+  "bugs": {
+    "url": "https://github.com/hengloem/khmer-hybrid-calendar-package/issues"
+  },
+  "homepage": "https://github.com/hengloem/khmer-hybrid-calendar-package#readme",
+  "dependencies": {
+    "@thyrith/momentkh": "^3.0.0",
+    "date-chinese": "^2.1.4"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.10.2",
+    "@typescript-eslint/eslint-plugin": "^8.18.0",
+    "@typescript-eslint/parser": "^8.18.0",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-jest": "^28.9.0",
+    "jest": "^29.7.0",
+    "jest-junit": "^16.0.0",
+    "prettier": "^3.4.2",
+    "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2"
+  }
+}
