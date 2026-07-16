@@ -120,6 +120,8 @@ export class KhmerCalendar {
       }
       
       return null;
+    } catch (error) {
+      return error;
     }
   }
 
