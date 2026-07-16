@@ -1,6 +1,6 @@
 import momentkh, { KhmerConversionResult, MoonPhase } from '@thyrith/momentkh';
 import { CalendarChinese } from 'date-chinese';
-import { CalendarEvent, KhmerDateInfo, HolidayType, CalendarOptions, ICalOptions } from './types';
+import { CalendarEvent, KhmerDateInfo, CalendarOptions, ICalOptions } from './types';
 import { 
   CHINESE_FESTIVALS, 
   MOON_PHASE_EMOJIS,
@@ -119,8 +119,6 @@ export class KhmerCalendar {
         return { lunarMonth, lunarDay, isLeap };
       }
       
-      return null;
-    } catch (error) {
       return null;
     }
   }
@@ -676,9 +674,6 @@ export class KhmerCalendar {
 
     while (currentDate <= endDate) {
       const year = currentDate.getFullYear();
-      const month = currentDate.getMonth() + 1;
-      const day = currentDate.getDate();
-      
       const yearEvents = this.generateAllEvents(year, options);
       const dateStr = formatDateString(currentDate);
       const dateEvents = yearEvents.filter(event => event.date === dateStr);
