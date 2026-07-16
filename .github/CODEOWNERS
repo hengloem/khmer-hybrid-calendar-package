@@ -1,0 +1,6 @@
+# Default owners for everything
+* @hengloem
+
+# Package configuration
+package.json @hengloem
+tsconfig.json @hengloem

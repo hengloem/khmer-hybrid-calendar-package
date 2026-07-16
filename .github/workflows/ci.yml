@@ -1,4 +1,4 @@
-name: CI
+name: CI/CD
 
 on:
   push:
@@ -32,6 +32,9 @@ jobs:
     - name: Lint
       run: npm run lint
     
+    - name: Build
+      run: npm run build
+    
     - name: Run tests with coverage
       run: npm run test:ci
     
@@ -42,23 +45,13 @@ jobs:
         files: ./coverage/lcov.info
         flags: unittests
         name: codecov-umbrella
-    
-    - name: Build
-      run: npm run build
-    
-    - name: Upload test results
-      uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: test-results-${{ matrix.node-version }}
-        path: |
-          coverage/
-          junit.xml
+        fail_ci_if_error: false
 
   publish:
     needs: test
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
     steps:
     - uses: actions/checkout@v4
     
@@ -78,3 +71,34 @@ jobs:
       run: npm publish
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        generate_release_notes: true
+        files: |
+          dist/**/*
+
+  publish-dry-run:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Use Node.js 20
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        registry-url: 'https://registry.npmjs.org'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Build
+      run: npm run build
+    
+    - name: Publish to NPM (Dry Run)
+      run: npm publish --dry-run
