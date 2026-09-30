@@ -1,6 +1,6 @@
 {
   "name": "khmer-hybrid-calendar",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A comprehensive Khmer hybrid calendar library with Gregorian and Khmer lunar dates, moon phases, and holiday calculations",
   "main": "dist/index.js",
   "module": "dist/index.mjs",

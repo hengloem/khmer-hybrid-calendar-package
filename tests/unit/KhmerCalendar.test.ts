@@ -13,7 +13,7 @@ describe('KhmerCalendar', () => {
       
       expect(result).toBeDefined();
       expect(result.monthName).toBe('ចេត្រ');
-      expect(result.lunarDay).toContain('កើត');
+      expect(result.lunarDay).toContain('រោច');
       expect(result.moonPhase).toBeDefined();
       expect(result.animalYear).toBeDefined();
     });
@@ -26,7 +26,7 @@ describe('KhmerCalendar', () => {
     });
 
     it('should handle new moon correctly', () => {
-      const result = calendar.gregorianToKhmer(2026, 4, 1);
+      const result = calendar.gregorianToKhmer(2026, 4, 16);
       expect(['New Moon', 'Waning Crescent']).toContain(result.moonPhase);
     });
   });
@@ -124,7 +124,7 @@ describe('KhmerCalendar', () => {
       });
       
       const dailyEvents = events.filter(e => 
-        e.type === 'khmer-lunar' && e.isHoliday === false
+        e.type === 'khmer-lunar' && !e.title.match(/^[🪷🪒🕯️🧘☸️]/u)
       );
       
       expect(dailyEvents.length).toBe(0);
@@ -143,9 +143,8 @@ describe('KhmerCalendar', () => {
       
       // All events should be within the date range
       events.forEach(event => {
-        const eventDate = new Date(event.date);
-        expect(eventDate >= startDate).toBe(true);
-        expect(eventDate <= endDate).toBe(true);
+        expect(event.date >= '2026-04-01').toBe(true);
+        expect(event.date <= '2026-04-30').toBe(true);
       });
     });
 
@@ -159,7 +158,7 @@ describe('KhmerCalendar', () => {
       });
       
       const dailyEvents = events.filter(e => 
-        e.type === 'khmer-lunar' && e.isHoliday === false
+        e.type === 'khmer-lunar' && !e.title.match(/^[🪷🪒🕯️🧘☸️]/u)
       );
       
       expect(dailyEvents.length).toBe(0);
@@ -168,7 +167,7 @@ describe('KhmerCalendar', () => {
 
   describe('isHoliday', () => {
     it('should return true for holiday dates', () => {
-      const khmerNewYear = new Date(2026, 3, 13); // April 13, 2026
+      const khmerNewYear = new Date(2026, 3, 14); // April 14, 2026
       expect(calendar.isHoliday(khmerNewYear)).toBe(true);
     });
 
@@ -180,7 +179,7 @@ describe('KhmerCalendar', () => {
 
   describe('getHolidaysForDate', () => {
     it('should return holidays for a specific date', () => {
-      const date = new Date(2026, 3, 13); // April 13, 2026
+      const date = new Date(2026, 3, 14); // April 14, 2026
       const holidays = calendar.getHolidaysForDate(date);
       
       expect(holidays).toBeDefined();

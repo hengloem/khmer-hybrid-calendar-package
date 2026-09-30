@@ -8,7 +8,7 @@ export const CHINESE_FESTIVALS: Record<string, string> = {
   '1-15': '🏮 បុណ្យបង្ហោះគោម (Lantern Festival)',
   '5-5': '🛶 បុណ្យទូកនាគ (Dragon Boat Festival)',
   '7-7': '💕 បុណ្យសែនតារាឆី (Qixi / Chinese Valentine\'s Day)',
-  '7-15': '👻 បុណ្យសែនខ្មោច (Hungry Ghost Festival / Zhongyuan Jie)',
+  '7-15': '👻 សែន​ក្បាល​ទឹក (Hungry Ghost Festival / Zhongyuan Jie)',
   '8-15': '🌕 បុណ្យសែនព្រះខែ (Mid-Autumn Festival)',
   '12-23': '🍯 ថ្ងៃសែនដកជើងធូប (Kitchen God Festival)',
 };
