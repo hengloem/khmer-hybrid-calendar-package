@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Khmer Hybrid Calendar Playground | ប្រតិទិនចន្ទគតិខ្មែរ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Kantumruy+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-page: #f8fafc;
+      --bg-surface: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --primary-light: #eff6ff;
+      --border-color: #e2e8f0;
+      --holiday-bg: #fee2e2;
+      --holiday-text: #b91c1c;
+      --buddhist-bg: #fef3c7;
+      --buddhist-text: #b45309;
+      --commem-bg: #f3e8ff;
+      --commem-text: #7e22ce;
+      --intl-bg: #e0f2fe;
+      --intl-text: #0369a1;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', 'Kantumruy Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      line-height: 1.5;
+      padding: 24px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    header {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .header-title h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header-title p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-top: 4px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border-color);
+      background: var(--bg-surface);
+      color: var(--text-main);
+      text-decoration: none;
+      transition: all 0.15s ease-in-out;
+    }
+
+    .btn:hover {
+      background: #f1f5f9;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    /* Main Grid Layout */
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 24px;
+    }
+
+    @media (max-width: 1024px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Controls Bar */
+    .controls-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-btn {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      background: var(--bg-surface);
+      cursor: pointer;
+      font-size: 1rem;
+      color: var(--text-main);
+    }
+
+    .nav-btn:hover {
+      background: #f1f5f9;
+    }
+
+    select, input[type="number"], input[type="date"] {
+      padding: 8px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      background: var(--bg-surface);
+      color: var(--text-main);
+      font-family: inherit;
+      outline: none;
+    }
+
+    select:focus, input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px var(--primary-light);
+    }
+
+    .filter-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .filter-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+      padding: 6px 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 9999px;
+      cursor: pointer;
+      user-select: none;
+      background: var(--bg-surface);
+    }
+
+    .filter-pill input {
+      accent-color: var(--primary);
+    }
+
+    /* Calendar Grid View */
+    .calendar-container {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .calendar-header {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      text-align: center;
+      margin-bottom: 12px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .calendar-header .sun {
+      color: #ef4444;
+    }
+
+    .calendar-header .sat {
+      color: #3b82f6;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+    }
+
+    .day-cell {
+      min-height: 110px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: all 0.15s ease-in-out;
+      background: var(--bg-surface);
+      position: relative;
+    }
+
+    .day-cell:hover {
+      border-color: var(--primary);
+      box-shadow: var(--shadow-sm);
+      transform: translateY(-1px);
+    }
+
+    .day-cell.other-month {
+      background: #f8fafc;
+      opacity: 0.45;
+    }
+
+    .day-cell.today {
+      border: 2px solid var(--primary);
+      background: #f0f7ff;
+    }
+
+    .day-cell.selected {
+      border: 2px solid #0f172a;
+      box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.15);
+    }
+
+    .day-cell-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 4px;
+    }
+
+    .greg-day {
+      font-size: 1.1rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .day-cell.holiday .greg-day {
+      color: #dc2626;
+    }
+
+    .moon-icon {
+      font-size: 1.1rem;
+      line-height: 1;
+    }
+
+    .lunar-info {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+
+    .event-badges {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: auto;
+    }
+
+    .event-tag {
+      font-size: 0.72rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.3;
+    }
+
+    .event-tag.holiday {
+      background: var(--holiday-bg);
+      color: var(--holiday-text);
+      font-weight: 600;
+    }
+
+    .event-tag.buddhist {
+      background: var(--buddhist-bg);
+      color: var(--buddhist-text);
+    }
+
+    .event-tag.commem {
+      background: var(--commem-bg);
+      color: var(--commem-text);
+    }
+
+    .event-tag.intl {
+      background: var(--intl-bg);
+      color: var(--intl-text);
+    }
+
+    /* Details Panel */
+    .details-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      height: fit-content;
+      position: sticky;
+      top: 24px;
+    }
+
+    .details-header h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .details-header .subtitle {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .lunar-banner {
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+      color: white;
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .lunar-banner .banner-moon {
+      font-size: 2.5rem;
+      line-height: 1;
+    }
+
+    .lunar-banner-text h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .lunar-banner-text p {
+      font-size: 0.85rem;
+      opacity: 0.9;
+    }
+
+    .info-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .info-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      padding-bottom: 8px;
+      border-bottom: 1px dashed var(--border-color);
+    }
+
+    .info-item span:first-child {
+      color: var(--text-muted);
+    }
+
+    .info-item span:last-child {
+      font-weight: 600;
+    }
+
+    .events-section h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .event-card {
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      margin-bottom: 8px;
+      background: #fafafa;
+    }
+
+    .event-card.holiday-card {
+      border-left: 4px solid #ef4444;
+      background: #fef2f2;
+    }
+
+    .event-card.buddhist-card {
+      border-left: 4px solid #f59e0b;
+      background: #fffbeb;
+    }
+
+    .event-card.commem-card {
+      border-left: 4px solid #a855f7;
+      background: #faf5ff;
+    }
+
+    .event-card.intl-card {
+      border-left: 4px solid #38bdf8;
+      background: #f0f9ff;
+    }
+
+    .event-card-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .event-card-desc {
+      font-size: 0.82rem;
+      color: #475569;
+      line-height: 1.4;
+    }
+
+    /* Tabs & JSON inspector */
+    .tab-buttons {
+      display: flex;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 12px;
+    }
+
+    .tab-btn {
+      padding: 6px 12px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      border-bottom: 2px solid transparent;
+    }
+
+    .tab-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    pre.json-box {
+      background: #0f172a;
+      color: #38bdf8;
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      font-size: 0.78rem;
+      overflow-x: auto;
+      max-height: 240px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 20px;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 32px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    footer a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+  </style>
+
+  <!-- Import map for modern browsers using esm.sh CDN -->
+  <script type="importmap">
+  {
+    "imports": {
+      "khmer-hybrid-calendar": "https://esm.sh/khmer-hybrid-calendar@1.1.1",
+      "@thyrith/momentkh": "https://esm.sh/@thyrith/momentkh@3.0.0",
+      "date-chinese": "https://esm.sh/date-chinese@2.1.4"
+    }
+  }
+  </script>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <div class="header-title">
+        <h1>🇰🇭 Khmer Hybrid Calendar Playground</h1>
+        <p>ប្រតិទិនចន្ទគតិខ្មែរ រួមបញ្ចូលថ្ងៃសីល ថ្ងៃឈប់សម្រាក និងដំណាក់ព្រះចន្ទ</p>
+      </div>
+      <div class="header-actions">
+        <span class="badge">npm v1.1.1</span>
+        <button id="btnDownloadIcal" class="btn btn-primary">
+          📥 Download .ics Feed
+        </button>
+        <a href="https://github.com/hengloem/khmer-hybrid-calendar-package" target="_blank" class="btn">
+          GitHub Repo
+        </a>
+        <a href="https://www.npmjs.com/package/khmer-hybrid-calendar" target="_blank" class="btn">
+          npm Package
+        </a>
+      </div>
+    </header>
+
+    <!-- Controls Bar -->
+    <div class="controls-card">
+      <div class="nav-group">
+        <button id="btnPrevMonth" class="nav-btn" title="Previous Month">◀</button>
+        <select id="selectMonth">
+          <option value="0">មករា (January)</option>
+          <option value="1">កុម្ភៈ (February)</option>
+          <option value="2">មីនា (March)</option>
+          <option value="3">មេសា (April)</option>
+          <option value="4">ឧសភា (May)</option>
+          <option value="5">មិថុនា (June)</option>
+          <option value="6">កក្កដា (July)</option>
+          <option value="7">សីហា (August)</option>
+          <option value="8">កញ្ញា (September)</option>
+          <option value="9">តុលា (October)</option>
+          <option value="10">វិច្ឆិកា (November)</option>
+          <option value="11">ធ្នូ (December)</option>
+        </select>
+        <input type="number" id="inputYear" value="2026" min="1900" max="2100" style="width: 90px;">
+        <button id="btnNextMonth" class="nav-btn" title="Next Month">▶</button>
+        <button id="btnToday" class="btn">ថ្ងៃនេះ (Today)</button>
+      </div>
+
+      <div class="filter-pills">
+        <label class="filter-pill">
+          <input type="checkbox" id="chkNational" checked>
+          <span>🇰🇭 ថ្ងៃបុណ្យជាតិ (National)</span>
+        </label>
+        <label class="filter-pill">
+          <input type="checkbox" id="chkBuddhist" checked>
+          <span>🪷 ថ្ងៃសីល/បុណ្យពុទ្ធសាសនា</span>
+        </label>
+        <label class="filter-pill">
+          <input type="checkbox" id="chkChinese" checked>
+          <span>🧧 បុណ្យចិន (Chinese)</span>
+        </label>
+        <label class="filter-pill">
+          <input type="checkbox" id="chkIntl" checked>
+          <span>🌐 អន្តរជាតិ (International)</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Main Layout: Grid + Inspector -->
+    <div class="layout">
+      <!-- Calendar View -->
+      <div class="calendar-container">
+        <div class="calendar-header">
+          <div class="sun">អាទិត្យ (Sun)</div>
+          <div>ច័ន្ទ (Mon)</div>
+          <div>អង្គារ (Tue)</div>
+          <div>ពុធ (Wed)</div>
+          <div>ព្រហស្បតិ៍ (Thu)</div>
+          <div>សុក្រ (Fri)</div>
+          <div class="sat">សៅរ៍ (Sat)</div>
+        </div>
+        <div id="calendarGrid" class="calendar-grid">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <!-- Details Inspector Sidebar -->
+      <aside class="details-card">
+        <div class="details-header">
+          <h2 id="detailDateText">23 តុលា 2026</h2>
+          <div id="detailDayOfWeek" class="subtitle">ថ្ងៃសុក្រ (Friday)</div>
+        </div>
+
+        <div class="lunar-banner">
+          <div id="detailMoonEmoji" class="banner-moon">🌕</div>
+          <div class="lunar-banner-text">
+            <h3 id="detailLunarTitle">១៣កើត ខែអស្សុជ</h3>
+            <p id="detailAnimalYear">ឆ្នាំមមែ សប្តស័ក ព.ស. ២៥៧០</p>
+          </div>
+        </div>
+
+        <div class="tab-buttons">
+          <button id="tabOverview" class="tab-btn active">Overview</button>
+          <button id="tabJson" class="tab-btn">JSON Output</button>
+        </div>
+
+        <div id="overviewContent">
+          <div class="info-list">
+            <div class="info-item">
+              <span>ដំណាក់ព្រះចន្ទ (Moon Phase):</span>
+              <span id="detailMoonPhase">Waxing Gibbous</span>
+            </div>
+            <div class="info-item">
+              <span>ថ្ងៃឈប់សម្រាក (Public Holiday):</span>
+              <span id="detailIsHoliday">ទេ (No)</span>
+            </div>
+            <div class="info-item">
+              <span>កាលបរិច្ឆេទ (ISO):</span>
+              <span id="detailIsoDate">2026-10-23</span>
+            </div>
+          </div>
+
+          <div class="events-section" style="margin-top: 20px;">
+            <h4>🎉 កម្មវិធី និងទិវាប្រារព្ធ (Events on Date)</h4>
+            <div id="detailEventsList">
+              <!-- Event cards injected here -->
+            </div>
+          </div>
+        </div>
+
+        <div id="jsonContent" style="display: none;">
+          <pre id="jsonViewer" class="json-box"><code>{}</code></pre>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      <p>Khmer Hybrid Calendar Library &copy; 2026 Heng Loem. Released under MIT License.</p>
+      <p>ជូនដល់ជាតិ សាសនា និងព្រះមហាក្សត្រ 🇰🇭</p>
+    </footer>
+  </div>
+
+  <!-- Main Application Logic -->
+  <script type="module">
+    import { KhmerCalendar } from "khmer-hybrid-calendar";
+
+    // Initialize calendar instance
+    const calendar = new KhmerCalendar();
+
+    // State
+    const today = new Date();
+    let currentYear = today.getFullYear();
+    let currentMonth = today.getMonth(); // 0-indexed
+    let selectedDate = new Date();
+
+    // DOM Elements
+    const gridEl = document.getElementById("calendarGrid");
+    const selectMonthEl = document.getElementById("selectMonth");
+    const inputYearEl = document.getElementById("inputYear");
+    const btnPrevEl = document.getElementById("btnPrevMonth");
+    const btnNextEl = document.getElementById("btnNextMonth");
+    const btnTodayEl = document.getElementById("btnToday");
+    const btnDownloadIcalEl = document.getElementById("btnDownloadIcal");
+
+    // Filter Elements
+    const chkNationalEl = document.getElementById("chkNational");
+    const chkBuddhistEl = document.getElementById("chkBuddhist");
+    const chkChineseEl = document.getElementById("chkChinese");
+    const chkIntlEl = document.getElementById("chkIntl");
+
+    // Inspector Elements
+    const detailDateTextEl = document.getElementById("detailDateText");
+    const detailDayOfWeekEl = document.getElementById("detailDayOfWeek");
+    const detailMoonEmojiEl = document.getElementById("detailMoonEmoji");
+    const detailLunarTitleEl = document.getElementById("detailLunarTitle");
+    const detailAnimalYearEl = document.getElementById("detailAnimalYear");
+    const detailMoonPhaseEl = document.getElementById("detailMoonPhase");
+    const detailIsHolidayEl = document.getElementById("detailIsHoliday");
+    const detailIsoDateEl = document.getElementById("detailIsoDate");
+    const detailEventsListEl = document.getElementById("detailEventsList");
+    const jsonViewerEl = document.getElementById("jsonViewer");
+
+    const tabOverviewEl = document.getElementById("tabOverview");
+    const tabJsonEl = document.getElementById("tabJson");
+    const overviewContentEl = document.getElementById("overviewContent");
+    const jsonContentEl = document.getElementById("jsonContent");
+
+    const khmerMonths = [
+      "មករា", "កុម្ភៈ", "មីនា", "មេសា", "ឧសភា", "មិថុនា",
+      "កក្កដា", "សីហា", "កញ្ញា", "តុលា", "វិច្ឆិកា", "ធ្នូ"
+    ];
+
+    const khmerDaysOfWeek = [
+      "ថ្ងៃអាទិត្យ", "ថ្ងៃច័ន្ទ", "ថ្ងៃអង្គារ", "ថ្ងៃពុធ", "ថ្ងៃព្រហស្បតិ៍", "ថ្ងៃសុក្រ", "ថ្ងៃសៅរ៍"
+    ];
+
+    function getOptions() {
+      return {
+        includeHolidays: chkNationalEl.checked,
+        includeBuddhistEvents: chkBuddhistEl.checked,
+        includeChineseEvents: chkChineseEl.checked,
+        includeInternationalEvents: chkIntlEl.checked,
+        includeDailyLunarDate: true
+      };
+    }
+
+    function renderCalendar() {
+      selectMonthEl.value = currentMonth;
+      inputYearEl.value = currentYear;
+
+      gridEl.innerHTML = "";
+
+      // Generate events cache for current year
+      const yearEvents = calendar.generateAllEvents(currentYear, getOptions());
+      const eventsByDate = new Map();
+      yearEvents.forEach(evt => {
+        if (!eventsByDate.has(evt.date)) {
+          eventsByDate.set(evt.date, []);
+        }
+        eventsByDate.get(evt.date).push(evt);
+      });
+
+      // Calculate days in month and padding
+      const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
+      const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+      const prevMonthDays = new Date(currentYear, currentMonth, 0).getDate();
+
+      // Leading padding days from previous month
+      for (let i = firstDayOfMonth - 1; i >= 0; i--) {
+        const d = prevMonthDays - i;
+        const cell = document.createElement("div");
+        cell.className = "day-cell other-month";
+        cell.innerHTML = `
+          <div class="day-cell-top">
+            <span class="greg-day">${d}</span>
+          </div>
+        `;
+        gridEl.appendChild(cell);
+      }
+
+      // Days of the current month
+      for (let day = 1; day <= daysInMonth; day++) {
+        const cellDate = new Date(currentYear, currentMonth, day);
+        const yyyy = cellDate.getFullYear();
+        const mm = String(cellDate.getMonth() + 1).padStart(2, "0");
+        const dd = String(day).padStart(2, "0");
+        const isoString = `${yyyy}-${mm}-${dd}`;
+
+        const khmerDate = calendar.gregorianToKhmer(yyyy, cellDate.getMonth() + 1, day);
+        const events = eventsByDate.get(isoString) || [];
+        const isHoliday = events.some(e => e.isHoliday);
+
+        const isToday = (
+          today.getFullYear() === yyyy &&
+          today.getMonth() === currentMonth &&
+          today.getDate() === day
+        );
+
+        const isSelected = (
+          selectedDate.getFullYear() === yyyy &&
+          selectedDate.getMonth() === currentMonth &&
+          selectedDate.getDate() === day
+        );
+
+        const cell = document.createElement("div");
+        cell.className = `day-cell ${isToday ? "today" : ""} ${isSelected ? "selected" : ""} ${isHoliday ? "holiday" : ""}`;
+        
+        // Filter out the generic daily lunar event from badge display so only notable events show
+        const displayEvents = events.filter(e => !e.title.match(/^(?:[០-៩]+(?:កើត|រោច))\s*ខែ/));
+
+        let badgesHtml = "";
+        displayEvents.slice(0, 2).forEach(evt => {
+          let badgeClass = "commem";
+          if (evt.isHoliday) badgeClass = "holiday";
+          else if (evt.title.includes("សីល") || evt.title.includes("កោរ") || evt.title.includes("បិណ្ឌ")) badgeClass = "buddhist";
+          else if (evt.type === "international") badgeClass = "intl";
+
+          badgesHtml += `<div class="event-tag ${badgeClass}" title="${evt.title}">${evt.title}</div>`;
+        });
+
+        if (displayEvents.length > 2) {
+          badgesHtml += `<div class="event-tag" style="background:#e2e8f0; color:#475569;">+${displayEvents.length - 2} more</div>`;
+        }
+
+        cell.innerHTML = `
+          <div class="day-cell-top">
+            <span class="greg-day">${day}</span>
+            <span class="moon-icon" title="${khmerDate.moonPhase}">${khmerDate.moonPhaseEmoji}</span>
+          </div>
+          <div class="lunar-info">${khmerDate.lunarDay} ${khmerDate.monthName}</div>
+          <div class="event-badges">${badgesHtml}</div>
+        `;
+
+        cell.addEventListener("click", () => {
+          selectedDate = new Date(currentYear, currentMonth, day);
+          document.querySelectorAll(".day-cell.selected").forEach(el => el.classList.remove("selected"));
+          cell.classList.add("selected");
+          updateInspector(selectedDate, khmerDate, events);
+        });
+
+        gridEl.appendChild(cell);
+
+        // Update inspector if this is the selected date
+        if (isSelected) {
+          updateInspector(selectedDate, khmerDate, events);
+        }
+      }
+
+      // Trailing padding days to fill 7 columns
+      const totalCells = firstDayOfMonth + daysInMonth;
+      const remaining = (7 - (totalCells % 7)) % 7;
+      for (let i = 1; i <= remaining; i++) {
+        const cell = document.createElement("div");
+        cell.className = "day-cell other-month";
+        cell.innerHTML = `
+          <div class="day-cell-top">
+            <span class="greg-day">${i}</span>
+          </div>
+        `;
+        gridEl.appendChild(cell);
+      }
+    }
+
+    function updateInspector(date, khmerDate, events) {
+      const yyyy = date.getFullYear();
+      const mIdx = date.getMonth();
+      const dd = date.getDate();
+      const dayOfWeekIdx = date.getDay();
+      const isoStr = `${yyyy}-${String(mIdx + 1).padStart(2, "0")}-${String(dd).padStart(2, "0")}`;
+
+      detailDateTextEl.textContent = `${dd} ${khmerMonths[mIdx]} ${yyyy}`;
+      detailDayOfWeekEl.textContent = `${khmerDaysOfWeek[dayOfWeekIdx]} (${date.toLocaleDateString("en-US", { weekday: "long" })})`;
+      detailMoonEmojiEl.textContent = khmerDate.moonPhaseEmoji;
+      detailLunarTitleEl.textContent = `${khmerDate.lunarDay} ខែ${khmerDate.monthName}`;
+      detailAnimalYearEl.textContent = `ឆ្នាំ${khmerDate.animalYear || "—"} ព.ស. ${khmerDate.lunarYear || "—"}`;
+      detailMoonPhaseEl.textContent = `${khmerDate.moonPhase} (${khmerDate.moonPhaseEmoji})`;
+
+      const isHoliday = events.some(e => e.isHoliday);
+      detailIsHolidayEl.textContent = isHoliday ? "បាទ/ចាស (Yes)" : "ទេ (No)";
+      detailIsHolidayEl.style.color = isHoliday ? "#dc2626" : "inherit";
+      detailIsoDateEl.textContent = isoStr;
+
+      // Filter events to display
+      const displayEvents = events.filter(e => !e.title.match(/^(?:[០-៩]+(?:កើត|រោច))\s*ខែ/));
+
+      if (displayEvents.length === 0) {
+        detailEventsListEl.innerHTML = `<div class="empty-state">គ្មានទិវាប្រារព្ធ ឬថ្ងៃឈប់សម្រាកក្នុងថ្ងៃនេះទេ (No special events on this date)</div>`;
+      } else {
+        detailEventsListEl.innerHTML = displayEvents.map(evt => {
+          let cardType = "commem-card";
+          if (evt.isHoliday) cardType = "holiday-card";
+          else if (evt.title.includes("សីល") || evt.title.includes("កោរ") || evt.title.includes("បិណ្ឌ")) cardType = "buddhist-card";
+          else if (evt.type === "international") cardType = "intl-card";
+
+          return `
+            <div class="event-card ${cardType}">
+              <div class="event-card-title">${evt.title}</div>
+              <div class="event-card-desc">${evt.description}</div>
+            </div>
+          `;
+        }).join("");
+      }
+
+      // JSON viewer tab
+      jsonViewerEl.textContent = JSON.stringify({
+        gregorian: isoStr,
+        khmerDateInfo: khmerDate,
+        events: displayEvents
+      }, null, 2);
+    }
+
+    // Event Listeners
+    selectMonthEl.addEventListener("change", (e) => {
+      currentMonth = parseInt(e.target.value);
+      selectedDate = new Date(currentYear, currentMonth, 1);
+      renderCalendar();
+    });
+
+    inputYearEl.addEventListener("change", (e) => {
+      currentYear = parseInt(e.target.value) || new Date().getFullYear();
+      selectedDate = new Date(currentYear, currentMonth, 1);
+      renderCalendar();
+    });
+
+    btnPrevEl.addEventListener("click", () => {
+      currentMonth--;
+      if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+      }
+      selectedDate = new Date(currentYear, currentMonth, 1);
+      renderCalendar();
+    });
+
+    btnNextEl.addEventListener("click", () => {
+      currentMonth++;
+      if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+      }
+      selectedDate = new Date(currentYear, currentMonth, 1);
+      renderCalendar();
+    });
+
+    btnTodayEl.addEventListener("click", () => {
+      const now = new Date();
+      currentYear = now.getFullYear();
+      currentMonth = now.getMonth();
+      selectedDate = now;
+      renderCalendar();
+    });
+
+    [chkNationalEl, chkBuddhistEl, chkChineseEl, chkIntlEl].forEach(chk => {
+      chk.addEventListener("change", renderCalendar);
+    });
+
+    // Tab switcher
+    tabOverviewEl.addEventListener("click", () => {
+      tabOverviewEl.classList.add("active");
+      tabJsonEl.classList.remove("active");
+      overviewContentEl.style.display = "block";
+      jsonContentEl.style.display = "none";
+    });
+
+    tabJsonEl.addEventListener("click", () => {
+      tabJsonEl.classList.add("active");
+      tabOverviewEl.classList.remove("active");
+      overviewContentEl.style.display = "none";
+      jsonContentEl.style.display = "block";
+    });
+
+    // Download iCal Feed
+    btnDownloadIcalEl.addEventListener("click", () => {
+      const icalContent = calendar.generateICalFeed(currentYear, {
+        calendarName: `Khmer Calendar ${currentYear}`
+      });
+
+      const blob = new Blob([icalContent], { type: "text/calendar;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `khmer-calendar-${currentYear}.ics`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    // Initial render
+    renderCalendar();
+  </script>
+</body>
+</html>

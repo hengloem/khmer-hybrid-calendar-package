@@ -27,6 +27,7 @@
     "lint:fix": "eslint src --ext .ts --fix",
     "format": "prettier --write \"src/**/*.ts\"",
     "prepublishOnly": "npm run build",
+    "playground": "npx serve playground",
     "version": "git add -A src",
     "postversion": "git push && git push --tags",
     "typecheck": "tsc --noEmit"

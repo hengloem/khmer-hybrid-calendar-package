@@ -33,7 +33,38 @@ export function escapeICalText(text: string): string {
 }
 
 export function foldLine(line: string): string {
-  const bytes = Buffer.from(line, 'utf8');
+  if (typeof Buffer !== 'undefined') {
+    const bytes = Buffer.from(line, 'utf8');
+    if (bytes.length <= 75) return line;
+
+    const result: string[] = [];
+    let offset = 0;
+
+    while (offset < bytes.length) {
+      if (offset === 0) {
+        let end = 75;
+        while (end > 0 && (bytes[end] & 0xc0) === 0x80) end--;
+        result.push(bytes.slice(0, end).toString('utf8'));
+        offset = end;
+      } else {
+        let end = offset + 74;
+        if (end >= bytes.length) {
+          result.push(' ' + bytes.slice(offset).toString('utf8'));
+          break;
+        }
+        while (end > offset && (bytes[end] & 0xc0) === 0x80) end--;
+        result.push(' ' + bytes.slice(offset, end).toString('utf8'));
+        offset = end;
+      }
+    }
+
+    return result.join('\r\n');
+  }
+
+  // Browser fallback with TextEncoder & TextDecoder
+  const encoder = new TextEncoder();
+  const decoder = new TextDecoder();
+  const bytes = encoder.encode(line);
   if (bytes.length <= 75) return line;
 
   const result: string[] = [];
@@ -43,16 +74,16 @@ export function foldLine(line: string): string {
     if (offset === 0) {
       let end = 75;
       while (end > 0 && (bytes[end] & 0xc0) === 0x80) end--;
-      result.push(bytes.slice(0, end).toString('utf8'));
+      result.push(decoder.decode(bytes.subarray(0, end)));
       offset = end;
     } else {
       let end = offset + 74;
       if (end >= bytes.length) {
-        result.push(' ' + bytes.slice(offset).toString('utf8'));
+        result.push(' ' + decoder.decode(bytes.subarray(offset)));
         break;
       }
       while (end > offset && (bytes[end] & 0xc0) === 0x80) end--;
-      result.push(' ' + bytes.slice(offset, end).toString('utf8'));
+      result.push(' ' + decoder.decode(bytes.subarray(offset, end)));
       offset = end;
     }
   }

@@ -26,6 +26,17 @@ A comprehensive JavaScript/TypeScript library for Khmer hybrid calendar calculat
 npm install khmer-hybrid-calendar
 ```
 
+## 🎮 Interactive Playground
+
+Explore the interactive monthly calendar, preview moon phases, filter Buddhist observances and national holidays, and export `.ics` feeds directly in your browser:
+
+```bash
+# Launch the local playground
+npm run playground
+```
+
+Or simply open [`playground/index.html`](playground/index.html) directly in your browser.
+
 ## 🚀 Quick Start
 
 ### TypeScript / ESM
