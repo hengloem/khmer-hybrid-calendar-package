@@ -25,7 +25,14 @@
             }
         ],
         "prefer-const": "error",
-        "no-var": "error"
+        "no-var": "error",
+        "no-irregular-whitespace": [
+            "error",
+            {
+                "skipStrings": true,
+                "skipTemplates": true
+            }
+        ]
     },
     "ignorePatterns": [
         "dist",

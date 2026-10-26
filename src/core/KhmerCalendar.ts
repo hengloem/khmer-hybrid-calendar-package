@@ -495,6 +495,18 @@ export class KhmerCalendar {
           });
         }
 
+        if (month === 10 && dayOfMonth === 23) {
+          const anniversaryOfParisPeace = currYear - 1991;
+
+          events.push({
+            date: dateStr,
+            title: `🤝 ទិវារំលឹក​ខួបលើកទី​${toKhmerNumeral(anniversaryOfParisPeace)} ​នៃកិច្ចព្រមព្រៀង​សន្តិភាព​ទីក្រុង​ប៉ារីស`,
+            description: `ខួបលើកទី${toKhmerNumeral(anniversaryOfParisPeace)} នៃកិច្ចព្រមព្រៀង​សន្តិភាព​ទីក្រុង​ប៉ារីស (Paris Peace Agreement Day)`,
+            type: 'cambodian-national',
+            isHoliday: false
+          });
+        }
+
         if (month === 10 && dayOfMonth === 29) {
           events.push({
             date: dateStr,

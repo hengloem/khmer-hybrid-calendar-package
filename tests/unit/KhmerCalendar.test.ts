@@ -81,6 +81,18 @@ describe('KhmerCalendar', () => {
       expect(independenceDay).toBeDefined();
     });
 
+    it('should include Paris Peace Agreement event on October 23', () => {
+      const events = calendar.generateAllEvents(2026);
+      const parisPeaceEvent = events.find(e => 
+        e.date === '2026-10-23' && e.title.includes('ប៉ារីស')
+      );
+
+      expect(parisPeaceEvent).toBeDefined();
+      expect(parisPeaceEvent?.type).toBe('cambodian-national');
+      expect(parisPeaceEvent?.isHoliday).toBe(false);
+      expect(parisPeaceEvent?.title).toContain('កិច្ចព្រមព្រៀង​សន្តិភាព​ទីក្រុង​ប៉ារីស');
+    });
+
     it('should include international observances when enabled', () => {
       const events = calendar.generateAllEvents(2026, {
         includeInternationalEvents: true
